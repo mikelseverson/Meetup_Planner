@@ -7,12 +7,12 @@
       :host {
         display: block;
       }
-
       span {
         @apply(--paper-font-body1);
       }
     </style>
 
+    <h2 class="page-title">Meetups</h2>
     <ul>
       <template is="dom-repeat" items="{{items}}">
         <li><span>{{item}}</span></li>
@@ -25,7 +25,7 @@
       'use strict';
 
       Polymer({
-        is: 'my-list',
+        is: 'meetup-list',
 
         properties: {
           items: {
@@ -35,7 +35,7 @@
         },
 
         ready: function() {
-          this.items = [];
+          this.items = ['one', 'two'];
         }
       });
     })();
