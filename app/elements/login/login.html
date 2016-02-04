@@ -66,12 +66,16 @@
       }
     },
 
-
     observers: [
-      'emailChanged(email)'
+      'emailChanged(email)', 'passwordChanged(password)'
     ],
 
     emailChanged: function(email) {
+        //email input has changed, validation can be done here
+        console.log(email);
+    },
+    passwordChanged: function(password) {
+        //password input has changed, validation can be done here
         console.log(email);
     },
     returnVal: function (val) {
@@ -111,12 +115,6 @@
     },
     createUserHandler: function (e) {
       this.$.firebaseLogin.createUser(this.email, this.password)
-    },
-    changePasswordHandler: function (e) {
-      this.$.firebaseLogin.changePassword(this.email, this.password, this.newPassword)
-    },
-    resetPasswordHandler: function (e) {
-      this.$.firebaseLogin.sendPasswordResetEmail(this.email)
     },
     computePasswordHidden: function (provider) {
       return provider !== 'password'
