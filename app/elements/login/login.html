@@ -21,7 +21,9 @@
 (function () { 
   'use strict'
   Polymer({
+
     is: 'fire-login',
+
     properties: {
       params: {
         type: Object,
@@ -29,9 +31,6 @@
       },
       provider: {
         type: String, value: 'password'
-      },
-      message: {
-        type: String, value: ''
       },
       email: {
         type: String, value: ''
@@ -64,15 +63,16 @@
       show_model: {
         type: Boolean, notify: true,
         computed: 'computeLogoutHidden(statusKnown, user)'
-      },
-      role: {
-        computed: 'getRole(user,userData)',
-        notify: true
-      },
-      admin: {
-        computed: 'isAdmin(role)',
-        notify: true
       }
+    },
+
+
+    observers: [
+      'emailChanged(email)'
+    ],
+
+    emailChanged: function(email) {
+        console.log(email);
     },
     returnVal: function (val) {
       if (val !== undefined && val !== null) {
@@ -156,43 +156,8 @@
       var n = d.getTime()
       this.$.firebaseDocument.query.ref().push({log: log, time: n, user: this.user})
     },
-    getRole: function (user, userData) {
-      if (userData !== undefined && userData !== null && user !== null) {
-        if (this.userSet === undefined && userData.owner === undefined) { // Stops Looping.
-          this.userSet = true
-          if (userData.num === undefined) {
-            userData.num = prompt('Hi ' + user.google.displayName + '\nPlease tell me your mobile phone number?', '07')
-          }
-          if (userData.owner === undefined) {
-            userData.owner = prompt('What is your housing association?', 'Yarlington')
-          }
-          if (userData.email === undefined) {
-            userData.email = prompt('and lastly you email address?', '')
-          }
-          if (userData.log === undefined) {
-            var d = new Date()
-            var n = d.getTime()
-            userData.log = [{first: n}]
-          }
-          userData.user = user
-          this.userData = clone(userData)
-        // this.ownerData = clone(userData)
-        }
-        // user
-        if (!userData.hasOwnProperty('role')) {
-          userData.role = 'User'
-        }
-        this.data = userData
-        return userData.role
-      } else {
-        return 'no data'
-      }
-    },
     getUserDataUrl: function (uid) {
       return 'https://hi9site.firebaseio.com/users/' + uid
-    },
-    isAdmin: function (role) {
-      return role === 'admin'
     }
   })
   function clone (obj) {
