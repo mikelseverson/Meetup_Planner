@@ -6,8 +6,10 @@
 
 <dom-module id="fire-create">
   <template>
-    <firebase-auth id="firebaseLogin" user="{{user}}" status-known="{{statusKnown}}" location="https://meetupdb.firebaseio.com/" provider="password" on-error="errorHandler" on-user-created="userSuccessHandler" on-password-changed="userSuccessHandler" on-password-reset="userSuccessHandler" params="{{params}}" on-user-removed="userSuccessHandler"></firebase-auth>
-    <firebase-document location="https://meetupdb.firebaseio.com/datac" id="firebaseDocument"></firebase-document>
+    <firebase-auth id="firebaseLogin" user="{{user}}" status-known="{{statusKnown}}" location="https://meetupdb.firebaseio.com/" provider="password" on-error="errorHandler" on-user-created="userSuccessHandler" params="{{params}}">
+    </firebase-auth>
+    <firebase-document location="https://meetupdb.firebaseio.com/users" id="firebaseDocument"></firebase-document>
+
 
     <paper-slider min="0" max="100" value="30" disabled style="width: 100%;"></paper-slider>
 
@@ -21,7 +23,7 @@
     <paper-input label="This that this" value="{{employer::input}}"></paper-input>
 
     <paper-button raised on-tap="createUserHandler" style="width: 100%;">Create</paper-button>
-        <paper-toast id="toast" text="User Created!"></paper-toast>
+    <paper-toast id="toast"></paper-toast>
   </template>
 </dom-module>
 
@@ -39,17 +41,23 @@
           password: ''
         }
       },
+      userDataUrl: {
+        computed: 'getUserDataUrl(uid)'
+      },
       provider: {
         type: String, value: 'password'
       }
     },
+    getUserDataUrl: function (uid) {
+      return 'https://meetupdb.firebaseio.com/users/' + uid
+    },
     errorHandler: function (e) {
-      this.log('Login Status')
-      this.message = 'Error: ' + e.detail.message
+      this.toastHandler('Error: ' + e.detail.message);
     },
     userSuccessHandler: function (e) {
-      this.message = e.type + ' success!'
       this.toastHandler("Welcome!");
+      this.$.firebaseDocument.query.ref().push({log: "dsa", time: "dsadsa", user: this.user})
+      console.log(this.user);
     },
     toastHandler: function (message) {
         this.$.toast.text=message;
@@ -62,22 +70,11 @@
       return !email || !password
     },
     computeLoginStatus: function (statusKnown, user) {
-      this.log('Login Status')
-      if (statusKnown && user) {
+      if (statusKnown && user)
         return 'Logged in'
-      }
-      if (statusKnown) {
+      if (statusKnown)
         return 'Logged out'
-      }
       return 'Unknown (checking status...)'
-    },
-    log: function (log) {
-      var d = new Date()
-      var n = d.getTime()
-      this.$.firebaseDocument.query.ref().push({log: log, time: n, user: this.user})
-    },
-    getUserDataUrl: function (uid) {
-      return 'https://meetupdb.firebaseio.com/users/' + uid
     }
   })
 })()

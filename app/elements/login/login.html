@@ -1,56 +1,50 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../bower_components/firebase-element/firebase-auth.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
 
-
-
 <dom-module id="fire-login">
 
-  <template>
-    <firebase-auth id="firebaseLogin" user="{{user}}" status-known="{{statusKnown}}" 
-    location="https://meetupdb.firebaseio.com/" provider="password" on-error="errorHandler" on-user-created="userSuccessHandler" params="{{params}}"</firebase-auth>
+  <style></style>
 
+  <template>
+    <firebase-auth id="firebaseLogin" user="{{user}}" status-known="{{statusKnown}}"
+    location="{{config.location}}" provider="{{config.type}}" on-error="errorHandler" on-login="userSuccessHandler"
+    params="{{params}}"></firebase-auth>
     <h2 class="page-title">Login</h2>
-    <paper-input label="Email Address" type="email" value="{{email::input}}"></paper-input>
-    <paper-input label="password" type="password" value="{{password::input}}"></paper-input>
+    <paper-input id="email" label="Email Address" type="email" value="{{params.email::input}}"></paper-input>
+    <paper-input label="password" type="password" value="{{params.password::input}}"></paper-input>
     <paper-button raised on-tap="logout" hidden$="{{computeLogoutHidden(statusKnown, user)}}"> Logout </paper-button>
     <paper-button raised on-tap="login" hidden$="{{computeLoginHidden(statusKnown, user)}}"> Login </paper-button>
+    <paper-toast id="toast"></paper-toast>
   </template>
 
 </dom-module>
 
 <script>
-(function () { 
+(function () {
   'use strict'
   Polymer({
 
     is: 'fire-login',
 
     properties: {
+      config: {
+        type: Object,
+        value: {
+          location: 'https://meetupdb.firebaseio.com/',
+          type: 'password'
+        }
+      },
       params: {
         type: Object,
-        value: {scope: 'email'}
-      },
-      provider: {
-        type: String, value: 'password'
-      },
-      email: {
-        type: String, value: ''
-      },
-      password: {
-        type: String, value: ''
+        value: {
+          email: '',
+          password: ''
+        }
       },
       user: {
         type: Object, value: null,
         notify: true
-      },
-      uid: {
-        computed: 'returnVal(user.uid)',
-        notify: true
-      },
-      owner: {
-        computed: 'returnVal(user.owner)'
       },
       userData: {
         type: Object, notify: true
@@ -63,68 +57,30 @@
       },
       statusKnown: {
         type: Boolean
-      },
-      show_model: {
-        type: Boolean, notify: true,
-        computed: 'computeLogoutHidden(statusKnown, user)'
-      }
-    },
-    observers: [
-      'emailChanged(email)', 'passwordChanged(password)'
-    ],
-    emailChanged: function(email) {
-        //email input has changed, validation can be done here
-        console.log(this.computeLoginStatus(this.statusKnown, this.user));
-    },
-    passwordChanged: function(password) {
-        //password input has changed, validation can be done here
-        console.log(password);
-    },
-    returnVal: function (val) {
-      if (val !== undefined && val !== null) {
-        return val
-      } else {
-        return undefined
       }
     },
     login: function () {
-      var params
-      try {
-        params = JSON.parse(this.params)
-      } catch (e) {
-        params = null
-      }
-      if (this.provider === 'password') {
-        params = params || {}
-        params.email = this.email
-        params.password = this.password
-      }
-      this.$.firebaseLogin.login(params)
+      this.$.firebaseLogin.login()
     },
     logout: function () {
       this.$.firebaseLogin.logout()
     },
     errorHandler: function (e) {
-      console.log(e)
-      console.log(e.detail.message);
-      this.message = 'Error: ' + e.detail.message
+      console.log('hit', e.detail.message);
+      this.toastHandler(e.detail.message);
     },
     userSuccessHandler: function (e) {
-      this.message = e.type + ' success!'
-      this.$.toast.open();
+      this.toastHandler('Thanks for coming back');
+    },
+    toastHandler: function (message) {
+        this.$.toast.text=message;
+        this.$.toast.open();
     },
     computeLoginHidden: function (statusKnown, user) {
       return !statusKnown || !!user
     },
     computeLogoutHidden: function (statusKnown, user) {
       return !statusKnown || !user
-    },
-    computeLoginStatus: function (statusKnown, user) {
-      if (statusKnown && user) 
-        return 'Logged in'  
-      if (statusKnown) 
-        return 'Logged out'
-      return 'Unknown (checking status...)'
     },
     getUserDataUrl: function (uid) {
       return 'https://meetupdb.firebaseio.com/users/' + uid

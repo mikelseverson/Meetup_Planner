@@ -48,6 +48,15 @@
 <body unresolved>
   <span id="browser-sync-binding"></span>
   <template is="dom-bind" id="app">
+    <firebase-auth
+      id="auth"
+      user="{{user}}"
+      status-known="{{statusKnown}}"
+      location="[[firebaseURL]]"
+      provider="[[firebaseProvider]]"
+      on-error="onFirebaseError"
+      on-login="onFirebaseLogin"></firebase-auth>
+      <paper-toast id="errorToast"></paper-toast>
 
     <paper-drawer-panel id="paperDrawerPanel">
       <!-- Drawer Scroll Header Panel -->
@@ -70,12 +79,17 @@
             <span>Meetups</span>
           </a>
 
-          <a data-route="login" href="{{baseUrl}}login">
+          <a data-route="login" hidden="{{user}}" href="{{baseUrl}}login">
             <iron-icon icon="account-box"></iron-icon>
-            <span>Login</span>
+            <span on-click="{{login}}">Login</span>
           </a>
 
-          <a data-route="join" href="{{baseUrl}}join">
+          <a data-route="logout" hidden="{{!user}}" href="{{baseUrl}}login">
+            <iron-icon icon="account-box"></iron-icon>
+            <span>Logout</span>
+          </a>
+
+          <a data-route="join" hidden="{{user}}" href="{{baseUrl}}join">
             <iron-icon icon="account-box"></iron-icon>
             <span>Join</span>
           </a>
@@ -139,7 +153,7 @@
     <paper-toast id="toast">
       <span class="toast-hide-button" role="button" tabindex="0" onclick="app.$.toast.hide()">Ok</span>
     </paper-toast>
-    
+
     <paper-toast id="caching-complete"
                  duration="6000"
                  text="Caching complete! This app will work offline.">
@@ -154,7 +168,7 @@
                          cache-config-file="cache-config.json">
       </platinum-sw-cache>
     </platinum-sw-register>
-    
+
   </template>
 
   <!-- build:js scripts/app.js -->

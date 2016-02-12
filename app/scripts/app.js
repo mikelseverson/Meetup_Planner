@@ -67,9 +67,21 @@
 
   app.closeDrawer = function() {
     app.$.paperDrawerPanel.closeDrawer();
+  }
+  // Firebase
+  app.onFirebaseError = function(event) {
+    this.$.errorToast.text = event.detail.message;
+    this.$.errorToast.show();
   };
-
-  // Firebase location
-  app.location = 'https://polymer-admin.firebaseio.com';
-
+  app.onFirebaseLogin = function(event) {
+    console.log(event)
+    console.log(this);
+    this.ref = new Firebase(this.firebaseURL + '/user/' +
+                                                  event.detail.user.uid);
+  };
+  app.onFirebaselogout = function(event) {
+    event.$.firebase
+  };
+  app.firebaseURL = 'https://meetupdb.firebaseio.com/';
+  app.firebaseProvider = 'password';
 })(document);
