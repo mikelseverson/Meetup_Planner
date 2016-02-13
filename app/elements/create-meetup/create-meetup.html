@@ -1,0 +1,44 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="create-meetup">
+  <template>
+
+    <h2 class="page-title">Title</h2>
+    <paper-input label="What is your name?" value="{{params.name::input}}"></paper-input>
+    <paper-input label="Email" type="email" value="{{params.email::input}}"></paper-input>
+    <paper-input label="Create your password" type="password" value="{{params.password::input}}"></paper-input>
+
+    <h3 class="page-title">Optional</h3>
+    <paper-input label="Who is your employer?" value="{{employer::input}}"></paper-input>
+    <paper-input label="This that this" value="{{employer::input}}"></paper-input>
+
+    <paper-button raised on-tap="createUserHandler" disabled="{{computeCreateUserDisabled(params.email, params.password)}}"
+    style="width: 100%;">Create</paper-button>
+    <paper-toast id="toast"></paper-toast>
+  </template>
+</dom-module>
+
+<script>
+(function () {
+  'use strict'
+  Polymer({
+    is: 'create-meetup',
+    properties: {
+      params: {
+        type: Object,
+        value: {
+          email: '',
+          password: ''
+        }
+      },
+      config: {
+        type: Object,
+        value: {
+          location: 'https://meetupdb.firebaseio.com/',
+          type: 'password'
+        }
+      }
+    }
+  })
+})()
+</script>

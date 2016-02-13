@@ -79,9 +79,6 @@
     this.ref = new Firebase(this.firebaseURL + '/user/' +
                                                   event.detail.user.uid);
   };
-  app.onFirebaselogout = function(event) {
-    event.$.firebase
-  };
   app.firebaseURL = 'https://meetupdb.firebaseio.com/';
   app.firebaseProvider = 'password';
 })(document);

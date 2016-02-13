@@ -3,6 +3,7 @@
 
 <dom-module id="meetup-list">
   <template>
+
     <style>
       :host {
         display: block;
@@ -11,13 +12,17 @@
         @apply(--paper-font-body1);
       }
     </style>
+    <firebase-collection
+      order-by-child="height" location="https://dinosaur-facts.firebaseio.com/dinosaurs"
+      data="{{dinosaurs}}"></firebase-collection>
 
     <h2 class="page-title">Meetups</h2>
-    <ul>
-      <template is="dom-repeat" items="{{items}}">
-        <li><span>{{item}}</span></li>
+
+      <template is="dom-repeat" items="[[dinosaurs]]" as="dinosaur">
+        <h4><a href="{{baseUrl}}meetups/[[dinosaur.__firebaseKey__]]">[[dinosaur.__firebaseKey__]]</a></h4>
+        <span>Height: </span><span>[[dinosaur.height]]</span><span>m</span>
       </template>
-    </ul>
+
   </template>
 
   <script>

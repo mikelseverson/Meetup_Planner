@@ -4,9 +4,8 @@
 
 <dom-module id="fire-login">
 
-  <style></style>
-
   <template>
+
     <firebase-auth id="firebaseLogin" user="{{user}}" status-known="{{statusKnown}}"
     location="{{config.location}}" provider="{{config.type}}" on-error="errorHandler" on-login="userSuccessHandler"
     params="{{params}}"></firebase-auth>
@@ -15,6 +14,7 @@
     <paper-input label="password" type="password" value="{{params.password::input}}"></paper-input>
     <paper-button raised on-tap="logout" hidden$="{{computeLogoutHidden(statusKnown, user)}}"> Logout </paper-button>
     <paper-button raised on-tap="login" hidden$="{{computeLoginHidden(statusKnown, user)}}"> Login </paper-button>
+
     <paper-toast id="toast"></paper-toast>
   </template>
 
@@ -66,15 +66,21 @@
       this.$.firebaseLogin.logout()
     },
     errorHandler: function (e) {
-      console.log('hit', e.detail.message);
       this.toastHandler(e.detail.message);
     },
     userSuccessHandler: function (e) {
       this.toastHandler('Thanks for coming back');
+      console.log(app)
     },
     toastHandler: function (message) {
-        this.$.toast.text=message;
-        this.$.toast.open();
+        if(!message) {
+          this.$.toast.text='Error';
+          this.$.toast.open();
+        }
+        else {
+          this.$.toast.text=message;
+          this.$.toast.open();
+        }
     },
     computeLoginHidden: function (statusKnown, user) {
       return !statusKnown || !!user

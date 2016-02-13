@@ -84,7 +84,7 @@
             <span on-click="{{login}}">Login</span>
           </a>
 
-          <a data-route="logout" hidden="{{!user}}" href="{{baseUrl}}login">
+          <a data-route="logout" hidden="{{!user}}" href="{{baseUrl}}logout">
             <iron-icon icon="account-box"></iron-icon>
             <span>Logout</span>
           </a>
@@ -122,6 +122,10 @@
             </section>
 
             <section data-route="meetups">
+              <paper-material elevation="1">
+                <create-meetup></create-meetup>
+              </paper-material>
+
               <paper-material elevation="1">
                 <meetup-list></meetup-list>
               </paper-material>
