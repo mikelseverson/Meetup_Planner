@@ -8,8 +8,8 @@
     <paper-input label="Email" type="email" value="{{params.email::input}}"></paper-input>
     <paper-input label="Create your password" type="password" value="{{params.password::input}}"></paper-input>
 
-    <h3 class="page-title">Optional</h3>
-    <paper-input label="Who is your employer?" value="{{employer::input}}"></paper-input>
+    <h3 class="page-title">Let's talk details</h3>
+    <paper-input label="What's the meetup location?" value="{{location::input}}"></paper-input>
     <paper-input label="This that this" value="{{employer::input}}"></paper-input>
 
     <paper-button raised on-tap="createUserHandler" disabled="{{computeCreateUserDisabled(params.email, params.password)}}"
@@ -37,6 +37,27 @@
           location: 'https://meetupdb.firebaseio.com/',
           type: 'password'
         }
+      },
+      user: {
+        type: Object, value: null,
+        notify: true
+      },
+      uid: {
+        computed: 'returnVal(user.uid)'
+      }
+      userDataUrl: {
+        computed: 'getUserDataUrl(uid)'
+      }
+    },
+    getUserDataUrl: function (uid) {
+      return 'https://meetupdb.firebaseio.com/users/' + uid
+    },
+    returnVal: function (val) {
+      if (val !== undefined && val !== null) {
+        return val
+      }
+      else {
+        return undefined
       }
     }
   })
