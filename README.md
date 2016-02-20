@@ -1,4 +1,4 @@
-Meetup Planner
+##Meetup Planner
 
 This is my first project for the Udacity senior web developer course.
 
