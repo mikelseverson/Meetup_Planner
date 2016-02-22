@@ -5,6 +5,27 @@
 
 
 <dom-module id="fire-create">
+  <style>
+  paper-button {
+    background: #2E3AA1;
+    color: black;
+    width: 100%;
+  }
+
+  paper-button:hover {
+    background: #3372DF;
+  }
+
+  paper-button[disabled],
+  paper-button[toggles][active] {
+    background: #fafafa;
+    color: gray;
+  }
+
+
+  </style>
+
+
   <template>
     <firebase-auth id="firebaseCreateUser" user="{{user}}" status-known="{{statusKnown}}" location="{{config.location}}"
     provider="{{config.provider}}" on-error="errorHandler" on-user-created="userCreated" params="{{params}}">
@@ -16,17 +37,18 @@
 
     <paper-slider min="0" max="100" value="30" disabled style="width: 100%;"></paper-slider>
 
-    <h2 class="page-title">Join us!</h2>
+    <h1 class="page-title">Join Meetup Network!</h2>
     <paper-input label="What is your name?" value="{{params.name::input}}"></paper-input>
     <paper-input label="Email" type="email" value="{{params.email::input}}"></paper-input>
     <paper-input label="Create your password" type="password" value="{{params.password::input}}"></paper-input>
 
-    <h3 class="page-title">Optional</h3>
+    <h2 class="page-title">Optional</h3>
     <paper-input label="Who is your employer?" value="{{employer::input}}"></paper-input>
     <paper-input label="This that this" value="{{employer::input}}"></paper-input>
 
     <paper-button raised on-tap="createUserHandler" disabled="{{computeCreateUserDisabled(params.email, params.password)}}"
-    style="width: 100%;">Create</paper-button>
+    class="create-user-btn">
+      Create</paper-button>
     <paper-toast id="toast"></paper-toast>
   </template>
 </dom-module>
