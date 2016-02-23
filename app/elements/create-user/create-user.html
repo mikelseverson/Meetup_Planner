@@ -85,9 +85,6 @@
         this.$.toast.text=message;
         this.$.toast.open();
     },
-    login: function () {
-      this.$.firebaseLogin.login()
-    },
     createUserHandler: function (e) {
       this.$.firebaseCreateUser.createUser(this.params.email, this.params.password);
     },
