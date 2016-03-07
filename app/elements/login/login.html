@@ -3,19 +3,20 @@
 <link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
 
 <dom-module id="fire-login">
-
+  <style>
+  .page-title {
+    margin-bottom: 0;
+  }
+  #login-btn {
+    width: 100%;
+  }
+  </style>
   <template>
-
-    <firebase-auth id="firebaseLogin" user="{{user}}" status-known="{{statusKnown}}"
-    location="{{config.location}}" provider="{{config.type}}" on-error="errorHandler" on-login="userSuccessHandler"
-    params="{{params}}"></firebase-auth>
     <h2 class="page-title">Login</h2>
-    <paper-input id="email" label="Email Address" type="email" value="{{params.email::input}}"></paper-input>
-    <paper-input label="password" type="password" value="{{params.password::input}}"></paper-input>
-    <paper-button raised on-tap="logout" hidden$="{{computeLogoutHidden(statusKnown, user)}}"> Logout </paper-button>
-    <paper-button raised on-tap="login" hidden$="{{computeLoginHidden(statusKnown, user)}}"> Login </paper-button>
 
-    <paper-toast id="toast"></paper-toast>
+    <paper-input label="Email Address" type="email" value="{{params.email::input}}"></paper-input>
+    <paper-input label="Password" type="password" value="{{params.password::input}}"></paper-input>
+    <paper-button raised on-tap="login">Login </paper-button>
   </template>
 
 </dom-module>
@@ -24,17 +25,9 @@
 (function () {
   'use strict'
   Polymer({
-
     is: 'fire-login',
 
     properties: {
-      config: {
-        type: Object,
-        value: {
-          location: 'https://meetupdb.firebaseio.com/',
-          type: 'password'
-        }
-      },
       params: {
         type: Object,
         value: {
@@ -42,54 +35,9 @@
           password: ''
         }
       },
-      user: {
-        type: Object, value: null,
-        notify: true
-      },
-      userData: {
-        type: Object, notify: true
-      },
-      userDataUrl: {
-        computed: 'getUserDataUrl(uid)'
-      },
-      ownerDataUrl: {
-        computed: 'getOwnerDataUrl(owner, uid)'
-      },
-      statusKnown: {
-        type: Boolean
-      }
     },
-    login: function () {
-      this.$.firebaseLogin.login()
-    },
-    logout: function () {
-      this.$.firebaseLogin.logout()
-    },
-    errorHandler: function (e) {
-      this.toastHandler(e.detail.message);
-    },
-    userSuccessHandler: function (e) {
-      this.toastHandler('Thanks for coming back');
-      console.log(app)
-    },
-    toastHandler: function (message) {
-        if(!message) {
-          this.$.toast.text='Error';
-          this.$.toast.open();
-        }
-        else {
-          this.$.toast.text=message;
-          this.$.toast.open();
-        }
-    },
-    computeLoginHidden: function (statusKnown, user) {
-      return !statusKnown || !!user
-    },
-    computeLogoutHidden: function (statusKnown, user) {
-      return !statusKnown || !user
-    },
-    getUserDataUrl: function (uid) {
-      return 'https://meetupdb.firebaseio.com/users/' + uid
+    login: function(e) {
+      app.firebaseLogin(this.params);
     }
   })
 })()

@@ -1,20 +1,44 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
 <dom-module id="create-meetup">
+  <style>
+    #slider {
+      width: 100%;
+    }
+    .page-title {
+      margin-bottom: 0;
+    }
+    #create-meetup-btn {
+      width: 100%;
+      background: #2E3AA1;
+      color: black;
+    }
+    #create-meetup-btn:hover {
+      background: #3372DF;
+    }
+    #create-meetup-btn[disabled],
+    #create-meetup-btn[toggles][active] {
+      background: #fafafa;
+      color: gray;
+    }
+
+  </style>
+
   <template>
+    <paper-slider id="slider" min="0" max="100" disabled></paper-slider>
 
-    <h2 class="page-title">Title</h2>
-    <paper-input label="What is your name?" value="{{params.name::input}}"></paper-input>
-    <paper-input label="Email" type="email" value="{{params.email::input}}"></paper-input>
-    <paper-input label="Create your password" type="password" value="{{params.password::input}}"></paper-input>
+    <h2 class="page-title">New Meetup</h2>
+    <paper-input label="What are we calling this event?" value="{{params.name::input}}"></paper-input>
+    <paper-input label="What type of event is this?"></paper-input>
+    <paper-input label="Who will be hosting this event?"></paper-input>
+    <paper-input label="Who will be attending this event?"></paper-input>
 
-    <h3 class="page-title">Let's talk details</h3>
-    <paper-input label="What's the meetup location?" value="{{location::input}}"></paper-input>
-    <paper-input label="This that this" value="{{employer::input}}"></paper-input>
+    <h3 class="page-title">Details</h3>
+    <paper-input label="Where is the meetup located?" value="{{params.location::input}}"></paper-input>
+    <paper-input label="Event start date and time" style="width: 30%; display: inline-block;"></paper-input>
+    <paper-input label="Event end date and time" style="width: 30%; display: inline-block;"></paper-input>
 
-    <paper-button raised on-tap="createUserHandler" disabled="{{computeCreateUserDisabled(params.email, params.password)}}"
-    style="width: 100%;">Create</paper-button>
-    <paper-toast id="toast"></paper-toast>
+    <paper-button id="create-meetup-btn" raised on-tap="createMeetupHandler" disabled="{{computeCreateEventDisabled(params.name)}}">Create</paper-button>
   </template>
 </dom-module>
 
@@ -31,34 +55,28 @@
           password: ''
         }
       },
-      config: {
+      validation: {
         type: Object,
         value: {
-          location: 'https://meetupdb.firebaseio.com/',
-          type: 'password'
+          name: {
+            type: Boolean,
+            default: false
+          },
+          email: {
+            type: Boolean,
+            default: false
+          }
         }
-      },
-      user: {
-        type: Object, value: null,
-        notify: true
-      },
-      uid: {
-        computed: 'returnVal(user.uid)'
-      },
-      userDataUrl: {
-        computed: 'getUserDataUrl(uid)'
       }
     },
-    getUserDataUrl: function (uid) {
-      return 'https://meetupdb.firebaseio.com/users/' + uid
+    createMeetupHandler: function(e) {
+      console.log('creating event', e)
     },
-    returnVal: function (val) {
-      if (val !== undefined && val !== null) {
-        return val
+    computeCreateEventDisabled: function(params) {
+      if(params) {
+        return false
       }
-      else {
-        return undefined
-      }
+      else return true;
     }
   })
 })()

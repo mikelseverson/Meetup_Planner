@@ -5,51 +5,47 @@
 
 
 <dom-module id="fire-create">
+
   <style>
   paper-button {
     background: #2E3AA1;
     color: black;
     width: 100%;
   }
-
+  h1.page-title {
+    margin-bottom: 0;
+  }
+  #slider {
+    width: 100%;
+    --paper-slider-disabled-active-color: --google-blue-700;
+  }
   paper-button:hover {
     background: #3372DF;
   }
-
   paper-button[disabled],
   paper-button[toggles][active] {
     background: #fafafa;
     color: gray;
   }
-
-
   </style>
 
 
   <template>
-    <firebase-auth id="firebaseCreateUser" user="{{user}}" status-known="{{statusKnown}}" location="{{config.location}}"
-    provider="{{config.provider}}" on-error="errorHandler" on-user-created="userCreated" params="{{params}}">
-    </firebase-auth>
-
-    <firebase-document id=firebaseDocument
-      location="https://meetupdb.firebaseio.com/"
-      data="{{userData}}"></firebase-document>
-
-    <paper-slider min="0" max="100" value="30" disabled style="width: 100%;"></paper-slider>
+    <paper-slider id="slider" min="0" max="100" disabled></paper-slider>
 
     <h1 class="page-title">Join Meetup Network!</h2>
-    <paper-input label="What is your name?" value="{{params.name::input}}"></paper-input>
+    <paper-input label="Hi, What is your name?" value="{{params.name::input}}"></paper-input>
     <paper-input label="Email" type="email" value="{{params.email::input}}"></paper-input>
     <paper-input label="Create your password" type="password" value="{{params.password::input}}"></paper-input>
+    <paper-input label="Confirm your password" type="password" value="{{params.passwordConfirm::input}}"></paper-input>
 
-    <h2 class="page-title">Optional</h3>
+    <h1 class="page-title">Optional</h3>
     <paper-input label="Who is your employer?" value="{{employer::input}}"></paper-input>
-    <paper-input label="This that this" value="{{employer::input}}"></paper-input>
+    <paper-input label="What is your job title?" value="{{job-title::input}}"></paper-input>
+    <paper-input label="When is your birthday?" value="{{birthday::input}}"></paper-input>
 
     <paper-button raised on-tap="createUserHandler" disabled="{{computeCreateUserDisabled(params.email, params.password)}}"
-    class="create-user-btn">
-      Create</paper-button>
-    <paper-toast id="toast"></paper-toast>
+    class="create-user-btn">Create</paper-button>
   </template>
 </dom-module>
 
@@ -63,38 +59,20 @@
         type: Object,
         value: {
           email: '',
-          password: ''
+          password: '',
+          passwordConfirm: ''
         }
-      },
-      config: {
-        type: Object,
-        value: {
-          location: 'https://meetupdb.firebaseio.com/',
-          provider: 'password'
-        }
-      },
-      user: {
-        type: Object,
-        notify: true
       }
     },
-    errorHandler: function (e) {
-      this.toastHandler('Error: ' + e.detail.message);
-    },
-    toastHandler: function (message) {
-        this.$.toast.text=message;
-        this.$.toast.open();
-    },
     createUserHandler: function (e) {
-      this.$.firebaseCreateUser.createUser(this.params.email, this.params.password);
-    },
-    userCreated: function (e) {
-      this.$.firebaseCreateUser.login();
-      console.log(this.user);
-      this.$.firebaseDocument.query.ref().push({name: "name", time: "dsadsa", user: this.user})
+      app.$.auth.createUser(this.params.email, this.params.password);
     },
     computeCreateUserDisabled: function (email, password) {
-      return !email || !password
+      if(email && password) {
+        this.$.slider.value += 10;
+        return false;
+      }
+      else return true;
     }
   })
 })()

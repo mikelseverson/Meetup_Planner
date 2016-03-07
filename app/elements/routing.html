@@ -48,12 +48,16 @@
       app.route = 'join';
     });
 
+    page('/logout', function() {
+      app.$.auth.logout();
+    });
+
     // 404
-    // page('*', function() {
-    //   app.$.toast.text = 'Can\'t find: ' + window.location.href  + '. Redirected you to Home Page';
-    //   app.$.toast.show();
-    //   page.redirect(app.baseUrl);
-    // });
+    page('*', function() {
+      app.$.toast.text = 'Can\'t find: ' + window.location.href  + '. Redirected you to Home Page';
+      app.$.toast.show();
+      page.redirect(app.baseUrl);
+    });
 
     // add #! before urls
     page({

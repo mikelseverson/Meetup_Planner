@@ -49,13 +49,15 @@
   <span id="browser-sync-binding"></span>
   <template is="dom-bind" id="app">
     <firebase-auth
-      id="auth"
+      id="auth" 
       user="{{user}}"
       status-known="{{statusKnown}}"
       location="[[firebaseURL]]"
       provider="[[firebaseProvider]]"
       on-error="onFirebaseError"
-      on-login="onFirebaseLogin"></firebase-auth>
+      on-login="onFirebaseLogin">
+    </firebase-auth>
+
     <paper-toast id="errorToast"></paper-toast>
 
     <paper-drawer-panel id="paperDrawerPanel">
@@ -76,23 +78,19 @@
 
           <a data-route="meetups" href="{{baseUrl}}meetups">
             <iron-icon icon="event"></iron-icon>
-            <span>Meetups</span>
+            <span>Create Meetup</span>
           </a>
 
           <a data-route="login" hidden="{{user}}" href="{{baseUrl}}login">
             <iron-icon icon="account-box"></iron-icon>
-            <span on-click="{{login}}">Login</span>
+            <span on-click="{{login}}">Login / Join</span>
           </a>
 
-          <!-- <a data-route="logout" hidden="{{!user}}" href="{{baseUrl}}logout">
+          <a data-route="logout" hidden="{{!user}}" href="{{baseUrl}}logout">
             <iron-icon icon="account-box"></iron-icon>
             <span>Logout</span>
-          </a> -->
-
-          <a data-route="join" hidden="{{user}}" href="{{baseUrl}}join">
-            <iron-icon icon="account-box"></iron-icon>
-            <span>Join</span>
           </a>
+
         </paper-menu>
       </paper-scroll-header-panel>
 
@@ -119,22 +117,22 @@
               <paper-material elevation="1">
                 <home-greeting></home-greeting>
               </paper-material>
-            </section>
-
-            <section data-route="meetups">
-              <paper-material elevation="1">
-                <create-meetup></create-meetup>
-              </paper-material>
 
               <paper-material elevation="1">
                 <meetup-list></meetup-list>
               </paper-material>
             </section>
 
+            <section data-route="meetups">
+              <paper-material elevation="1">
+                <create-meetup></create-meetup>
+              </paper-material>
+            </section>
+
             <section data-route="meetup-info">
               <paper-material elevation="1">
-                <h2 class="page-title">User: {{params.meetup}}</h2>
-                <div>This is {{params.meetup}}'s section</div>
+                <h2 class="page-title">Event: {{params.meetup}}</h2>
+                <div>This is a {{params.meetup}} meet-up!</div>
               </paper-material>
             </section>
 
@@ -142,15 +140,15 @@
               <paper-material elevation="1">
                 <fire-login></fire-login>
               </paper-material>
-            </section>
 
-            <section data-route="join">
               <paper-material elevation="1">
                 <fire-create></fire-create>
               </paper-material>
             </section>
+
           </iron-pages>
-        </div>
+        </div> <!-- Main Content -->
+
       </paper-scroll-header-panel>
     </paper-drawer-panel>
 
@@ -163,7 +161,7 @@
                  text="Caching complete! This app will work offline.">
     </paper-toast>
 
-    <platinum-sw-register auto-register
+    <!-- <platinum-sw-register auto-register
                           clients-claim
                           skip-waiting
                           base-uri="bower_components/platinum-sw/bootstrap"
@@ -171,7 +169,7 @@
       <platinum-sw-cache default-cache-strategy="fastest"
                          cache-config-file="cache-config.json">
       </platinum-sw-cache>
-    </platinum-sw-register>
+    </platinum-sw-register> -->
 
   </template>
 

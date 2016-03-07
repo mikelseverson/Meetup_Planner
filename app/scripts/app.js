@@ -24,7 +24,7 @@
   // Listen for template bound event to know when bindings
   // have resolved and content has been stamped to the page
   app.addEventListener('dom-change', function() {
-    console.log('Our app is ready to rock!');
+    // console.log('Dom ready');
   });
 
   // See https://github.com/Polymer/polymer/issues/1381
@@ -68,17 +68,25 @@
   app.closeDrawer = function() {
     app.$.paperDrawerPanel.closeDrawer();
   }
+  app.toastHandler = function(text) {
+    app.$.toast.text = text;
+    app.$.toast.show();
+  }
+
   // Firebase
+  app.firebaseLogin = function(params) {
+    app.$.auth.login(params)
+  }
+  app.firebaseLogout = function() {
+    app.$.auth.logout()
+  }
   app.onFirebaseError = function(event) {
-    this.$.errorToast.text = event.detail.message;
-    this.$.errorToast.show();
+    app.toastHandler(event.detail.message);
   };
   app.onFirebaseLogin = function(event) {
-    console.log(event)
-    console.log(this);
-    this.ref = new Firebase(this.firebaseURL + '/user/' +
-                                                  event.detail.user.uid);
+    app.toastHandler('You are now logged in')
   };
   app.firebaseURL = 'https://meetupdb.firebaseio.com/';
   app.firebaseProvider = 'password';
+
 })(document);
