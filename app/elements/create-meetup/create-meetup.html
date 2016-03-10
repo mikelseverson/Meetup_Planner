@@ -28,15 +28,15 @@
     <paper-slider id="slider" min="0" max="100" disabled></paper-slider>
 
     <h2 class="page-title">New Meetup</h2>
-    <paper-input label="What are we calling this event?" value="{{params.name::input}}"></paper-input>
-    <paper-input label="What type of event is this?"></paper-input>
-    <paper-input label="Who will be hosting this event?"></paper-input>
+    <paper-input label="What are we calling this event?" value="{{params.eventName::input}}"></paper-input>
+    <paper-input label="What type of event is this?" value="{{params.eventType::input}}"></paper-input>
+    <paper-input label="Who will be hosting this event?" value="{{params.eventHost::input}}"></paper-input>
     <paper-input label="Who will be attending this event?"></paper-input>
 
     <h3 class="page-title">Details</h3>
-    <paper-input label="Where is the meetup located?" value="{{params.location::input}}"></paper-input>
-    <paper-input label="Event start date and time" style="width: 30%; display: inline-block;"></paper-input>
-    <paper-input label="Event end date and time" style="width: 30%; display: inline-block;"></paper-input>
+    <paper-input label="Where is the meetup located?" value="{{params.eventLocation::input}}"></paper-input>
+    <paper-input label="Event start date and time"  value="{{params.eventStartTime::input}}" style="width: 30%; display: inline-block;"></paper-input>
+    <paper-input label="Event end date and time"  value="{{params.eventEndTime::input}}" style="width: 30%; display: inline-block;"></paper-input>
 
     <paper-button id="create-meetup-btn" raised on-tap="createMeetupHandler" disabled="{{computeCreateEventDisabled(params.name)}}">Create</paper-button>
   </template>
@@ -51,8 +51,12 @@
       params: {
         type: Object,
         value: {
-          email: '',
-          password: ''
+          eventName: '',
+          eventType: '',
+          eventHost: '',
+          eventLocation: '',
+          eventStartTime: '',
+          eventEndTime: ''
         }
       },
       validation: {
@@ -69,14 +73,22 @@
         }
       }
     },
-    createMeetupHandler: function(e) {
-      console.log('creating event', e)
+    validateForm: function (params) {
+      //Check if form is valid
+
+      //Adjust progress bar based on the form validation status
+
+      //If form valid return true and make create event button clickable
     },
-    computeCreateEventDisabled: function(params) {
-      if(params) {
-        return false
-      }
-      else return true;
+    createMeetupHandler: function (e) {
+      //Button was successfully clicked.
+
+      //revalidate form, if form is valid send data to firebase
+    },
+    computeCreateEventDisabled: function (params) {
+    //call validate form
+
+    //if form is valid
     }
   })
 })()

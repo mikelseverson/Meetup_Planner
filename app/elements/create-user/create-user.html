@@ -7,6 +7,10 @@
 <dom-module id="fire-create">
 
   <style>
+  #slider {
+    width: 100%;
+    --paper-slider-disabled-active-color: --google-blue-700;
+  }
   paper-button {
     background: #2E3AA1;
     color: black;
@@ -15,10 +19,7 @@
   h1.page-title {
     margin-bottom: 0;
   }
-  #slider {
-    width: 100%;
-    --paper-slider-disabled-active-color: --google-blue-700;
-  }
+
   paper-button:hover {
     background: #3372DF;
   }
@@ -64,8 +65,20 @@
         }
       }
     },
+    validateForm: function() {
+
+    },
     createUserHandler: function (e) {
+      //Revalidate form,
+
+      //if valid, then send data to firebase element
       app.$.auth.createUser(this.params.email, this.params.password);
+    },
+    computeCreateUserDisabled: function (email, password) {
+      //validateForm
+
+      //if form valid send return true, this will allow user to click the submission element for the form.
+
     },
     computeCreateUserDisabled: function (email, password) {
       if(email && password) {

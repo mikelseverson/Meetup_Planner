@@ -10,13 +10,19 @@
   #login-btn {
     width: 100%;
   }
+  #slider {
+    width: 100%;
+    --paper-slider-disabled-active-color: --google-blue-700;
+  }
   </style>
   <template>
+    <paper-slider id="slider" min="0" max="100" disabled></paper-slider>
+
     <h2 class="page-title">Login</h2>
 
     <paper-input label="Email Address" type="email" value="{{params.email::input}}"></paper-input>
     <paper-input label="Password" type="password" value="{{params.password::input}}"></paper-input>
-    <paper-button raised on-tap="login">Login </paper-button>
+    <paper-button raised on-tap="loginHandler" disabled="{{validateForm(params.email, params.password)}}">Login </paper-button>
   </template>
 
 </dom-module>
@@ -36,7 +42,34 @@
         }
       },
     },
-    login: function(e) {
+    validateForm: function(email, password) {
+      if(email && password) {
+        this.$.slider.value = 100;
+        return true;
+      }
+      else if(email) {
+        this.$.slider.value = 50;
+        return false;
+      }
+      else if(password) {
+        this.$.slider.value = 50;
+        return false;
+      }
+      else {
+        this.$.slider.value = 0;
+        return false;
+      }
+
+    },
+    computeLoginDisabled: function() {
+      //check if form is valid
+
+      //if form is return true, allowing user to submit form and log in
+    },
+    loginHandler: function(e) {
+      //recheck if the form is valid
+
+      //if form is valid, send data to the firebase element
       app.firebaseLogin(this.params);
     }
   })
