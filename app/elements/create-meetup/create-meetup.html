@@ -4,28 +4,28 @@
   <style>
     #slider {
       width: 100%;
+      --paper-slider-disabled-active-color: --google-blue-700;
     }
     .page-title {
       margin-bottom: 0;
     }
-    #create-meetup-btn {
+    paper-button {
       width: 100%;
       background: #2E3AA1;
       color: black;
     }
-    #create-meetup-btn:hover {
+    paper-button:hover {
       background: #3372DF;
     }
-    #create-meetup-btn[disabled],
-    #create-meetup-btn[toggles][active] {
+    paper-button[disabled],
+    paper-button[toggles][active] {
       background: #fafafa;
       color: gray;
     }
-
   </style>
 
   <template>
-    <paper-slider id="slider" min="0" max="100" disabled></paper-slider>
+    <paper-progress id="slider"></paper-progress>
 
     <h2 class="page-title">New Meetup</h2>
     <paper-input label="What are we calling this event?" value="{{params.eventName::input}}"></paper-input>
@@ -40,56 +40,69 @@
 
     <paper-button id="create-meetup-btn" raised on-tap="createMeetupHandler" disabled="{{computeCreateEventDisabled(params.name)}}">Create</paper-button>
   </template>
-</dom-module>
-
-<script>
-(function () {
-  'use strict'
-  Polymer({
-    is: 'create-meetup',
-    properties: {
-      params: {
-        type: Object,
-        value: {
-          eventName: '',
-          eventType: '',
-          eventHost: '',
-          eventLocation: '',
-          eventStartTime: '',
-          eventEndTime: ''
-        }
-      },
-      validation: {
-        type: Object,
-        value: {
-          name: {
-            type: Boolean,
-            default: false
-          },
-          email: {
-            type: Boolean,
-            default: false
+  <script>
+  (function () {
+    'use strict'
+    Polymer({
+      is: 'create-meetup',
+      properties: {
+        params: {
+          type: Object,
+          value: {
+            eventName: '',
+            eventType: '',
+            eventHost: '',
+            eventLocation: '',
+            eventStartTime: '',
+            eventEndTime: ''
+          }
+        },
+        validation: {
+          type: Object,
+          value: {
+            name: {
+              type: Boolean
+              },
+            email: {
+              type: Boolean
+              }
           }
         }
+      },
+      validateForm: function (params) {
+        if(!params) return;
+
+        // name
+        // host
+        // time
+        // endtime
+        // location ( request then confirm through google)
+        // event type (array search)
+        //
+        //
+        //
+        // d
+        //Check if form is valid then adjust progress bar based on validaty then
+        //open notification box showing value errors
+
+        //Adjust progress bar based on the form validation status
+
+        //If form valid return true and make create event button clickable
+      },
+      createMeetupHandler: function (e) {
+        //Button was successfully clicked.
+
+        //revalidate form, if form is valid send data to firebase
+
+        //parse firebase response add event data to database
+
+      },
+      computeCreateEventDisabled: function (params) {
+      //call validate form
+
+      //if form is valid make button clickable
       }
-    },
-    validateForm: function (params) {
-      //Check if form is valid
-
-      //Adjust progress bar based on the form validation status
-
-      //If form valid return true and make create event button clickable
-    },
-    createMeetupHandler: function (e) {
-      //Button was successfully clicked.
-
-      //revalidate form, if form is valid send data to firebase
-    },
-    computeCreateEventDisabled: function (params) {
-    //call validate form
-
-    //if form is valid
-    }
-  })
-})()
-</script>
+    })
+  })()
+  </script>
+</dom-module>

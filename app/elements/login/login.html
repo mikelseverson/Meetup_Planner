@@ -7,16 +7,23 @@
   .page-title {
     margin-bottom: 0;
   }
-  #login-btn {
+  paper-button {
+    background: #2E3AA1;
+    color: black;
     width: 100%;
   }
-  #slider {
+  paper-button:hover {
+    background: #3372DF;
+  }
+  paper-progress {
     width: 100%;
-    --paper-slider-disabled-active-color: --google-blue-700;
+    --paper-progress-active-color: #3372DF;
+    --paper-progress-height: 8px;
   }
   </style>
+
   <template>
-    <paper-slider id="slider" min="0" max="100" disabled></paper-slider>
+    <paper-progress id="loginFormProgress"></paper-progress>
 
     <h2 class="page-title">Login</h2>
 
@@ -24,54 +31,52 @@
     <paper-input label="Password" type="password" value="{{params.password::input}}"></paper-input>
     <paper-button raised on-tap="loginHandler" disabled="{{validateForm(params.email, params.password)}}">Login </paper-button>
   </template>
+  <script>
+  (function () {
+    'use strict'
+    Polymer({
+      is: 'fire-login',
 
-</dom-module>
-
-<script>
-(function () {
-  'use strict'
-  Polymer({
-    is: 'fire-login',
-
-    properties: {
-      params: {
-        type: Object,
-        value: {
-          email: '',
-          password: ''
-        }
+      properties: {
+        params: {
+          type: Object,
+          value: {
+            email: '',
+            password: ''
+          }
+        },
       },
-    },
-    validateForm: function(email, password) {
-      if(email && password) {
-        this.$.slider.value = 100;
-        return true;
-      }
-      else if(email) {
-        this.$.slider.value = 50;
-        return false;
-      }
-      else if(password) {
-        this.$.slider.value = 50;
-        return false;
-      }
-      else {
-        this.$.slider.value = 0;
-        return false;
-      }
+      validateForm: function(email, password) {
+        if(email && password) {
+          this.$.loginFormProgress.value = 100;
+          return false;
+        }
+        else if(email) {
+          this.$.loginFormProgress.value = 50;
+          return true;
+        }
+        else if(password) {
+          this.$.loginFormProgress.value = 50;
+          return true;
+        }
+        else {
+          this.$.loginFormProgress.value = 0;
+          return true;
+        }
 
-    },
-    computeLoginDisabled: function() {
-      //check if form is valid
+      },
+      computeLoginDisabled: function() {
+        //check if form is valid
 
-      //if form is return true, allowing user to submit form and log in
-    },
-    loginHandler: function(e) {
-      //recheck if the form is valid
+        //if form is return true, allowing user to submit form and log in
+      },
+      loginHandler: function(e) {
+        //recheck if the form is valid
 
-      //if form is valid, send data to the firebase element
-      app.firebaseLogin(this.params);
-    }
-  })
-})()
-</script>
+        //if form is valid, send data to the firebase element
+        app.firebaseLogin(this.params);
+      }
+    })
+  })()
+  </script>
+</dom-module>

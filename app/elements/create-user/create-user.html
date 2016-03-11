@@ -7,9 +7,14 @@
 <dom-module id="fire-create">
 
   <style>
-  #slider {
+  #createUserFormProgress {
     width: 100%;
     --paper-slider-disabled-active-color: --google-blue-700;
+  }
+  paper-progress {
+    width: 100%;
+    --paper-progress-active-color: #3372DF;
+    --paper-progress-height: 8px;
   }
   paper-button {
     background: #2E3AA1;
@@ -32,7 +37,7 @@
 
 
   <template>
-    <paper-slider id="slider" min="0" max="100" disabled></paper-slider>
+    <paper-progress id="createUserFormProgress"></paper-progress>
 
     <h1 class="page-title">Join Meetup Network!</h2>
     <paper-input label="Hi, What is your name?" value="{{params.name::input}}"></paper-input>
@@ -48,45 +53,47 @@
     <paper-button raised on-tap="createUserHandler" disabled="{{computeCreateUserDisabled(params.email, params.password)}}"
     class="create-user-btn">Create</paper-button>
   </template>
-</dom-module>
 
-<script>
-(function () {
-  'use strict'
-  Polymer({
-    is: 'fire-create',
-    properties: {
-      params: {
-        type: Object,
-        value: {
-          email: '',
-          password: '',
-          passwordConfirm: ''
+  <script>
+  (function () {
+
+    'use strict'
+    Polymer({
+      is: 'fire-create',
+      properties: {
+        params: {
+          type: Object,
+          value: {
+            email: '',
+            password: '',
+            passwordConfirm: ''
+          }
         }
+      },
+      validateForm: function() {
+
+      },
+      createUserHandler: function (e) {
+        //Revalidate form,
+
+        //if valid, then send data to firebase element
+        app.$.auth.createUser(this.params.email, this.params.password);
+      },
+      computeCreateUserDisabled: function (email, password) {
+        //validateForm
+
+        //if form valid send return true, this will allow user to click the submission element for the form.
+
+      },
+      computeCreateUserDisabled: function (email, password) {
+        if(email && password) {
+          this.$.slider.value += 10;
+          return false;
+        }
+        else return true;
       }
-    },
-    validateForm: function() {
+    })
+  })()
+  </script>
 
-    },
-    createUserHandler: function (e) {
-      //Revalidate form,
-
-      //if valid, then send data to firebase element
-      app.$.auth.createUser(this.params.email, this.params.password);
-    },
-    computeCreateUserDisabled: function (email, password) {
-      //validateForm
-
-      //if form valid send return true, this will allow user to click the submission element for the form.
-
-    },
-    computeCreateUserDisabled: function (email, password) {
-      if(email && password) {
-        this.$.slider.value += 10;
-        return false;
-      }
-      else return true;
-    }
-  })
-})()
-</script>
+</dom-module>
