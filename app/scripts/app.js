@@ -85,6 +85,7 @@
   };
   app.onFirebaseLogin = function(event) {
     app.toastHandler('You are now logged in')
+    page('/')
   };
   app.firebaseURL = 'https://meetupdb.firebaseio.com/';
   app.firebaseProvider = 'password';
